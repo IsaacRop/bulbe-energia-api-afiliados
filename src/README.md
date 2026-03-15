@@ -1,1 +1,0 @@
-# bulbe-energia-api-afiliados
