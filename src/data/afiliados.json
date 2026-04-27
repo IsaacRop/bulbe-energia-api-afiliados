@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "nome": "Amazon",
+    "slug": "amazon",
+    "logo": "icon-amazon.png",
+    "site": "https://www.amazon.com.br"
+  },
+  {
+    "id": 2,
+    "nome": "Araujo",
+    "slug": "araujo",
+    "logo": "icon-araujo.png",
+    "site": "https://www.araujo.com.br"
+  },
+  {
+    "id": 3,
+    "nome": "Leroy Merlin",
+    "slug": "leroy-merlin",
+    "logo": "icon-leroy.png",
+    "site": "https://www.leroymerlin.com.br"
+  },
+  {
+    "id": 4,
+    "nome": "Ponto Frio",
+    "slug": "ponto-frio",
+    "logo": "icon-ponto.png",
+    "site": "https://www.pontofrio.com.br"
+  },
+  {
+    "id": 5,
+    "nome": "Positivo",
+    "slug": "positivo",
+    "logo": "icon-positivo.png",
+    "site": "https://www.meupositivo.com.br"
+  }
+]
