@@ -18,12 +18,12 @@ Projeto desenvolvido para a disciplina de Projeto de Desenvolvimento Backend —
 | Nome Completo | Matrícula | GitHub |
 |---|---|---|
 | Isaac | 202501007856 | [@IsaacRop](https://github.com/IsaacRop) |
-| Guilherme | 202501007899 | [@Gui-Pacheco] (https://github.com/Gui-Pacheco) |
-| Gustavo | 202501006833 | [@Gustavo-Salles] (https://github.com/Gustavo-Salles) |
-| Lara | 202501524151 | [@Laragranato17] (https://github.com/Laragranato17) |
-| Isabella | 202502920121 | [@IsabellaAssiss] (https://github.com/IsabellaAssiss) |
-| José | 202508623791 | [@josevml] (https://github.com/josevml) |
-| Augusto | 202501347274 | [@AugustoGaipo] (https://github.com/AugustoGaipo) |
+| Guilherme | 202501007899 | [@Gui-Pacheco](https://github.com/Gui-Pacheco) |
+| Gustavo | 202501006833 | [@Gustavo-Salles](https://github.com/Gustavo-Salles) |
+| Lara | 202501524151 | [@Laragranato17](https://github.com/Laragranato17) |
+| Isabella | 202502920121 | [@IsabellaAssiss](https://github.com/IsabellaAssiss) |
+| José | 202508623791 | [@josevml](https://github.com/josevml) |
+| Augusto | 202501347274 | [@AugustoGaipo](https://github.com/AugustoGaipo) |
 
 ---
 
@@ -35,19 +35,71 @@ A **Bulbe Energia API** é o backend do sistema BulbeShop, um e-commerce de prod
 
 ## 🏗️ Arquitetura
 
-> *A ser preenchido na Sprint 2 após definição da arquitetura MVC.*
+O projeto segue o padrão **MVC (Model-View-Controller)** adaptado para APIs REST, com uma camada adicional de **Services** para isolar a regra de negócio dos controllers.
+
+```
+Cliente ──HTTP──▶ Routes ──▶ Controllers ──▶ Services ──▶ Models ──▶ Banco
+```
+
+- **Routes:** definem os endpoints e delegam para os controllers.
+- **Controllers:** recebem a requisição, validam entrada e chamam os services.
+- **Services:** concentram a regra de negócio.
+- **Models:** representam as entidades e a persistência.
+- **Middlewares:** tratamento de erros, autenticação JWT (RNF-02) e logs.
 
 ---
 
 ## 🔧 Tecnologias
 
-> *A ser preenchido na Sprint 2.*
+| Categoria | Ferramenta |
+|---|---|
+| Runtime | Node.js 18+ |
+| Framework HTTP | Express 5 |
+| Dev server | Nodemon |
+| Lint | ESLint (RNF-03) |
+| Documentação | OpenAPI 3.1 (RNF-05) |
+| Autenticação | JWT (RNF-02) — *a ser adicionado na Sprint 4* |
+| Banco de Dados | *a ser definido na Sprint 3* |
 
 ---
 
 ## ⚙️ Como Executar Localmente
 
-> *A ser preenchido na Sprint 2.*
+### Pré-requisitos
+- Node.js 18 ou superior
+- npm 9 ou superior
+- Git
+
+### Passos
+
+```bash
+# 1. Clonar o repositório
+git clone https://github.com/IsaacRop/bulbe-energia-api-afiliados.git
+cd bulbe-energia-api-afiliados
+
+# 2. Instalar dependências
+npm install
+
+# 3. Configurar variáveis de ambiente
+cp .env.example .env
+# edite o .env conforme necessário
+
+# 4. Subir o servidor em modo desenvolvimento (com hot reload)
+npm run dev
+
+# ou em modo produção
+npm start
+```
+
+A API ficará disponível em `http://localhost:3000/api/v1`.
+
+### Scripts disponíveis
+
+| Script | Descrição |
+|---|---|
+| `npm start` | Sobe o servidor em modo produção |
+| `npm run dev` | Sobe o servidor com hot reload (Nodemon) |
+| `npm test` | Executa a suíte de testes |
 
 ---
 
@@ -84,16 +136,23 @@ A **Bulbe Energia API** é o backend do sistema BulbeShop, um e-commerce de prod
 ```
 bulbe-energia-api-afiliados/
 ├── docs/
-│   ├── requisitos.md
-│   └── openapi.yaml
+│   ├── requisitos.md         # Levantamento de requisitos (Sprint 1)
+│   └── openapi.yaml          # Especificação OpenAPI 3.1
 ├── src/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   └── services/
-├── tests/
+│   ├── controllers/          # Recebem requisições e respondem
+│   ├── services/             # Regra de negócio
+│   ├── models/               # Entidades e persistência
+│   ├── routes/               # Definição dos endpoints
+│   ├── middlewares/          # Auth, tratamento de erros, logs
+│   ├── config/               # Configuração de ambiente e banco
+│   ├── app.js                # Instancia o Express e middlewares
+│   └── server.js             # Sobe o servidor HTTP
+├── tests/                    # Testes automatizados
+├── .env.example              # Modelo de variáveis de ambiente
 ├── .gitignore
+├── .eslintrc.json
 ├── package.json
+├── LICENSE
 └── README.md
 ```
 
@@ -104,8 +163,8 @@ bulbe-energia-api-afiliados/
 | Sprint | Foco | Status |
 |--------|------|--------|
 | Kickoff | Apresentação dos trabalhos do semestre anterior | ✅ Concluída |
-| Sprint 1 | Setup + Elicitação de Requisitos | 🔄 Em andamento |
-| Sprint 2 | Modelagem + Arquitetura + CRUD básico | ⏳ Aguardando |
+| Sprint 1 | Setup + Elicitação de Requisitos | ✅ Concluída |
+| Sprint 2 | Modelagem + Arquitetura + CRUD básico | 🔄 Em andamento |
 | Sprint 3 | Banco de Dados + ORM + Testes | ⏳ Aguardando |
 | Sprint 4 | Autenticação + Documentação Final | ⏳ Aguardando |
 
