@@ -9,4 +9,16 @@ function listar(req, res, next) {
   }
 }
 
-module.exports = { listar };
+function cadastrar(req, res, next) {
+  try {
+    const novoAfiliado = afiliadoService.cadastrar(req.body);
+    return res.status(201).json(novoAfiliado);
+  } catch (err) {
+    if(err.status === 422) {
+      return res.status(422).json({erro: err.message});
+    }
+    return next(err);
+  }
+}
+
+module.exports = { listar, cadastrar };
