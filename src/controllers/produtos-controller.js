@@ -36,6 +36,15 @@ const ProdutosController = {
       next(err);
     }
   },
+
+  async remover(req, res, next) {
+    try {
+      await ProdutosService.remover(req.params.id);
+      return res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  },
 };
 
 module.exports = ProdutosController;

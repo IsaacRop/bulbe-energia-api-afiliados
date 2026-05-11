@@ -56,6 +56,18 @@ const ProdutosService = {
 
     return produto;
   },
+
+  async remover(id) {
+    const removido = ProdutosModel.deleteById(id);
+
+    if (!removido) {
+      const err = new Error('Produto não encontrado.');
+      err.status = 404;
+      throw err;
+    }
+
+    return removido;
+  },
 };
 
 module.exports = ProdutosService;

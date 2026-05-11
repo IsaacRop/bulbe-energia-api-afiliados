@@ -39,6 +39,16 @@ const ProdutosModel = {
 
     return produtos[index];
   },
+
+  deleteById(id) {
+    const index = produtos.findIndex((p) => p.id === Number(id));
+
+    if (index === -1) return null;
+
+    const [removido] = produtos.splice(index, 1);
+
+    return removido;
+  },
 };
 
 module.exports = ProdutosModel;

@@ -8,5 +8,6 @@ router.post('/', authMiddleware, ProdutosController.cadastrar);
 router.get('/', ProdutosController.listar);
 router.get('/:id', ProdutosController.buscarPorId);
 router.put('/:id', ProdutosController.atualizar);
+router.delete('/:id', ProdutosController.remover);
 
 module.exports = router;
