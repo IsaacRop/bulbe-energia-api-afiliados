@@ -45,4 +45,7 @@ const ProdutosService = {
 
 
 
-}
+};
+
+
+module.exports = ProdutosService;
