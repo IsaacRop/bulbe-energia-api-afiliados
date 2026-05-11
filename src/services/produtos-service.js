@@ -29,8 +29,7 @@ const ProdutosService = {
     }
 
     return produto;
-  }
+  },
+};
 
-
-  
-}
+module.exports = ProdutosService;

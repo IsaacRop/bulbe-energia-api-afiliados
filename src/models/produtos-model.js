@@ -21,9 +21,7 @@ const ProdutosModel = {
     };
 
     return produtos[index];
-  }
+  },
+};
 
-
-
-  
-}
+module.exports = ProdutosModel;
