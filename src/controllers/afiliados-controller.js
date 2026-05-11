@@ -21,4 +21,16 @@ function cadastrar(req, res, next) {
   }
 }
 
-module.exports = { listar, cadastrar };
+function listarProdutos(req, res, next) {
+  try {
+    const produtos = afiliadoService.listarProdutosPorAfiliado(req.params.id);
+    return res.status(200).json(produtos);
+  } catch (err) {
+    if (err.status === 404) {
+      return res.status(404).json({ erro: err.message });
+    }
+    return next(err);
+  }
+}
+
+module.exports = { listar, cadastrar, listarProdutos };
