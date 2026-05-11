@@ -34,3 +34,4 @@ const FavoritosModel = {
 };
 
 module.exports = FavoritosModel;
+
