@@ -15,6 +15,18 @@ const ProdutosController = {
       next(err);
     }
   },
+
+  async remover(req, res, next) {
+    try {
+      const removido = await ProdutosService.remover(req.params.id);
+
+      return res.status(200).json({
+        data: removido,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };
 
 module.exports = ProdutosController;
