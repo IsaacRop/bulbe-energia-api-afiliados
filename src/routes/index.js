@@ -9,6 +9,6 @@ router.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
 router.use('/afiliados', afiliadosRoutes);
 router.use('/favoritos', favoritosRoutes);
-router.use('/produto',produtosRoutes);""
+router.use('/produtos', produtosRoutes);
 
 module.exports = router;
