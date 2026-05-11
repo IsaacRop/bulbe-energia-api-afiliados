@@ -4,8 +4,8 @@ const produtos = [...produtosIniciais];
 
 const ProdutosModel = {
   create(dados) {
-    const novoId = produtos.length > 0 
-      ? Math.max(...produtos.map((p) => p.id)) + 1 
+    const novoId = produtos.length > 0
+      ? Math.max(...produtos.map((p) => p.id)) + 1
       : 1;
 
     const novo = {
@@ -16,6 +16,14 @@ const ProdutosModel = {
 
     produtos.push(novo);
     return novo;
+  },
+
+  findAll() {
+    return produtos;
+  },
+
+  findById(id) {
+    return produtos.find((p) => p.id === Number(id));
   },
 };
 

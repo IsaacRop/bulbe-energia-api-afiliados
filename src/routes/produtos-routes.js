@@ -4,8 +4,8 @@ const authMiddleware = require('../middlewares/auth');
 
 const router = Router();
 
-// RF-10: Cadastro de produto
-// RNF-02: Exige autenticação para operações de escrita
 router.post('/', authMiddleware, ProdutosController.cadastrar);
+router.get('/', ProdutosController.listar);
+router.get('/:id', ProdutosController.buscarPorId);
 
 module.exports = router;
