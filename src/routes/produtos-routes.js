@@ -11,4 +11,3 @@ const ProdutosController = {
   }
 };
 
-module.exports = ProdutosController;
