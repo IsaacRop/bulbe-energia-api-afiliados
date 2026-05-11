@@ -9,7 +9,42 @@ const ProdutosController = {
       next(err);
     }
   },
+
+  async listar(req, res, next) {
+    try {
+      const produtos = await ProdutosService.listarTodos();
+      return res.status(200).json({ data: produtos });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async buscarPorId(req, res, next) {
+    try {
+      const produto = await ProdutosService.buscarPorId(req.params.id);
+      return res.status(200).json({ data: produto });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async atualizar(req, res, next) {
+    try {
+      const produto = await ProdutosService.atualizar(req.params.id, req.body);
+      return res.status(200).json({ data: produto });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async remover(req, res, next) {
+    try {
+      await ProdutosService.remover(req.params.id);
+      return res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  },
 };
 
 module.exports = ProdutosController;
-
