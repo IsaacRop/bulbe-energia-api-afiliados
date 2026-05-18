@@ -49,6 +49,10 @@ const ProdutosModel = {
 
     return removido;
   },
+
+  findByAfiliadoNome(nomeAfiliado) {
+    return produtos.filter((p) => p.loja === nomeAfiliado);
+  },
 };
 
 module.exports = ProdutosModel;

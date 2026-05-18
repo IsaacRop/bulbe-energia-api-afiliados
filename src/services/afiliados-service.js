@@ -1,4 +1,5 @@
 const afiliadoModel = require('../models/afiliados-model');
+const ProdutosModel = require('../models/produtos-model');
 
 function listarTodos() {
   return afiliadoModel.findAll();
@@ -22,4 +23,16 @@ function cadastrar(dados){
   return afiliadoModel.create({nome,slug,logo,site});
 }
 
-module.exports = { listarTodos, cadastrar };
+function listarProdutosPorAfiliado(id) {
+  const afiliado = afiliadoModel.findById(id);
+
+  if (!afiliado) {
+    const err = new Error('Afiliado não encontrado');
+    err.status = 404;
+    throw err;
+  }
+
+  return ProdutosModel.findByAfiliadoNome(afiliado.nome);
+}
+
+module.exports = { listarTodos, cadastrar, listarProdutosPorAfiliado };

@@ -28,7 +28,6 @@ const router = express.Router();
  */
 
 router.get('/', afiliadosController.listar);
-
 /**
  * @openapi
  * /afiliados:
@@ -55,6 +54,9 @@ router.get('/', afiliadosController.listar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
+
+
+router.get('/:id/produtos', afiliadosController.listarProdutos);
 
 router.post('/',afiliadosController.cadastrar);
 
