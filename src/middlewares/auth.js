@@ -1,14 +1,27 @@
-function authMiddleware(req, res, next) {
-  const usuarioId = req.headers['x-user-id'];
+const jwt = require('jsonwebtoken');
 
-  if (!usuarioId) {
-    const err = new Error('Não autorizado. Envie o header x-user-id.');
+const JWT_SECRET = process.env.JWT_SECRET || 'bulbe-secret';
+
+function authMiddleware(req, res, next) {
+  const header = req.headers['authorization'];
+
+  if (!header || !header.startsWith('Bearer ')) {
+    const err = new Error('Token não fornecido.');
     err.status = 401;
     return next(err);
   }
 
-  req.usuarioId = usuarioId;
-  next();
+  const token = header.split(' ')[1];
+
+  try {
+    req.usuario = jwt.verify(token, JWT_SECRET);
+    req.usuarioId = req.usuario.sub;
+    next();
+  } catch (e) {
+    const err = new Error('Token inválido.');
+    err.status = 401;
+    return next(err);
+  }
 }
 
 module.exports = authMiddleware;
