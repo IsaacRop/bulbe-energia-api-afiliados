@@ -10,9 +10,14 @@ const ProdutosController = {
     }
   },
 
-  listar(req, res, next) {
+ listar(req, res, next) {
     try {
-      const produtos = ProdutosModel.findAll();
+      const { search, categoria } = req.query;
+
+      const produtos = (search || categoria)
+        ? ProdutosModel.findByFiltros({ search, categoria })
+        : ProdutosModel.findAll();
+
       return res.status(200).json({ data: produtos });
     } catch (err) {
       next(err);

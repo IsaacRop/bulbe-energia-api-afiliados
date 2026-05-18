@@ -16,6 +16,25 @@ const ProdutosModel = {
     return db.prepare('SELECT * FROM produtos').all();
   },
 
+  findByFiltros({ search, categoria }) {
+    if (search) {
+      return db.prepare(`
+        SELECT * FROM produtos
+        WHERE nome LIKE ? OR descricao LIKE ?
+      `).all(`%${search}%`, `%${search}%`);
+    }
+
+    if (categoria) {
+      return db.prepare(`
+        SELECT p.* FROM produtos p
+        JOIN categorias c ON c.id = p.categoria_id
+        WHERE c.nome = ?
+      `).all(categoria);
+    }
+
+    return this.findAll();
+  },
+
   findById(id) {
     return db.prepare('SELECT * FROM produtos WHERE id = ?').get(Number(id));
   },
