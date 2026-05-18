@@ -1,13 +1,8 @@
 // src/db/conexao.js
-import Database from 'better-sqlite3';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = dirname(__filename);
+const Database = require('better-sqlite3');
+const { join } = require('node:path');
 
 const DB_PATH = join(__dirname, '..', '..', 'bulbe.db');
-
 const db = new Database(DB_PATH);
 
 db.pragma('journal_mode = WAL');
@@ -52,4 +47,4 @@ db.exec(`
   );
 `);
 
-export default db;
+module.exports = db;

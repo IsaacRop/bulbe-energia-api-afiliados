@@ -1,45 +1,61 @@
-const ProdutosService = require('../services/produtos-service');
+const ProdutosModel = require('../models/produtos-model');
 
 const ProdutosController = {
-  async cadastrar(req, res, next) {
+  cadastrar(req, res, next) {
     try {
-      const novoProduto = await ProdutosService.cadastrar(req.body);
+      const novoProduto = ProdutosModel.create(req.body);
       return res.status(201).json({ data: novoProduto });
     } catch (err) {
       next(err);
     }
   },
 
-  async listar(req, res, next) {
+  listar(req, res, next) {
     try {
-      const produtos = await ProdutosService.listarTodos();
+      const produtos = ProdutosModel.findAll();
       return res.status(200).json({ data: produtos });
     } catch (err) {
       next(err);
     }
   },
 
-  async buscarPorId(req, res, next) {
+  buscarPorId(req, res, next) {
     try {
-      const produto = await ProdutosService.buscarPorId(req.params.id);
+      const produto = ProdutosModel.findById(req.params.id);
+
+      if (!produto) {
+        return res.status(404).json({ error: 'Produto não encontrado' });
+      }
+
       return res.status(200).json({ data: produto });
     } catch (err) {
       next(err);
     }
   },
 
-  async atualizar(req, res, next) {
+  atualizar(req, res, next) {
     try {
-      const produto = await ProdutosService.atualizar(req.params.id, req.body);
+      const existe = ProdutosModel.findById(req.params.id);
+
+      if (!existe) {
+        return res.status(404).json({ error: 'Produto não encontrado' });
+      }
+
+      const produto = ProdutosModel.updateById(req.params.id, req.body);
       return res.status(200).json({ data: produto });
     } catch (err) {
       next(err);
     }
   },
 
-  async remover(req, res, next) {
+  remover(req, res, next) {
     try {
-      await ProdutosService.remover(req.params.id);
+      const removido = ProdutosModel.deleteById(req.params.id);
+
+      if (!removido) {
+        return res.status(404).json({ error: 'Produto não encontrado' });
+      }
+
       return res.status(204).send();
     } catch (err) {
       next(err);

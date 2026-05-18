@@ -1,57 +1,56 @@
-const produtosIniciais = require('../data/produtos.json');
-
-const produtos = [...produtosIniciais];
+const db = require('../db/conexao');
 
 const ProdutosModel = {
   create(dados) {
-    const novoId = produtos.length > 0
-      ? Math.max(...produtos.map((p) => p.id)) + 1
-      : 1;
+    const stmt = db.prepare(`
+      INSERT INTO produtos (nome, descricao, preco, imagem, afiliado_id, categoria_id)
+      VALUES (@nome, @descricao, @preco, @imagem, @afiliado_id, @categoria_id)
+    `);
 
-    const novo = {
-      id: novoId,
-      ...dados,
-      criadoEm: new Date().toISOString(),
-    };
+    const result = stmt.run(dados);
 
-    produtos.push(novo);
-    return novo;
+    return db.prepare('SELECT * FROM produtos WHERE id = ?').get(result.lastInsertRowid);
   },
 
   findAll() {
-    return produtos;
+    return db.prepare('SELECT * FROM produtos').all();
   },
 
   findById(id) {
-    return produtos.find((p) => p.id === Number(id));
+    return db.prepare('SELECT * FROM produtos WHERE id = ?').get(Number(id));
   },
 
   updateById(id, dados) {
-    const index = produtos.findIndex((p) => p.id === Number(id));
+    const stmt = db.prepare(`
+      UPDATE produtos
+      SET nome = @nome,
+          descricao = @descricao,
+          preco = @preco,
+          imagem = @imagem,
+          afiliado_id = @afiliado_id,
+          categoria_id = @categoria_id
+      WHERE id = @id
+    `);
 
-    if (index === -1) return null;
+    stmt.run({ ...dados, id: Number(id) });
 
-    produtos[index] = {
-      ...produtos[index],
-      ...dados,
-      id: produtos[index].id,
-    };
-
-    return produtos[index];
+    return db.prepare('SELECT * FROM produtos WHERE id = ?').get(Number(id));
   },
 
   deleteById(id) {
-    const index = produtos.findIndex((p) => p.id === Number(id));
+    const produto = db.prepare('SELECT * FROM produtos WHERE id = ?').get(Number(id));
+    if (!produto) return null;
 
-    if (index === -1) return null;
-
-    const [removido] = produtos.splice(index, 1);
-
-    return removido;
+    db.prepare('DELETE FROM produtos WHERE id = ?').run(Number(id));
+    return produto;
   },
 
   findByAfiliadoNome(nomeAfiliado) {
-    return produtos.filter((p) => p.loja === nomeAfiliado);
+    return db.prepare(`
+      SELECT p.* FROM produtos p
+      JOIN afiliados a ON a.id = p.afiliado_id
+      WHERE a.nome = ?
+    `).all(nomeAfiliado);
   },
 };
 
