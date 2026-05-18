@@ -1,26 +1,24 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'bulbe-secret';
-
 function authMiddleware(req, res, next) {
-  const header = req.headers['authorization'];
+  const authHeader = req.headers['authorization'];
 
-  if (!header || !header.startsWith('Bearer ')) {
-    const err = new Error('Token não fornecido.');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const err = new Error('Não autorizado. Token JWT ausente.');
     err.status = 401;
     return next(err);
   }
 
-  const token = header.split(' ')[1];
+  const token = authHeader.split(' ')[1];
 
   try {
-    req.usuario = jwt.verify(token, JWT_SECRET);
-    req.usuarioId = req.usuario.sub;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
-  } catch (e) {
-    const err = new Error('Token inválido.');
+  } catch {
+    const err = new Error('Não autorizado. Token JWT inválido ou expirado.');
     err.status = 401;
-    return next(err);
+    next(err);
   }
 }
 

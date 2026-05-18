@@ -1,21 +1,50 @@
-const produtosService = require('../services/produtos-service');
+const ProdutosService = require('../services/produtos-service');
 
-function listar(req, res, next) {
-  try {
-    const produtos = produtosService.listarTodos();
-    return res.status(200).json(produtos);
-  } catch (err) {
-    return next(err);
-  }
-}
+const ProdutosController = {
+  async cadastrar(req, res, next) {
+    try {
+      const novoProduto = await ProdutosService.cadastrar(req.body);
+      return res.status(201).json({ data: novoProduto });
+    } catch (err) {
+      next(err);
+    }
+  },
 
-function buscarPorId(req, res, next) {
-  try {
-    const produto = produtosService.buscarPorId(req.params.id);
-    return res.status(200).json(produto);
-  } catch (err) {
-    return next(err);
-  }
-}
+  async listar(req, res, next) {
+    try {
+      const produtos = await ProdutosService.listarTodos();
+      return res.status(200).json({ data: produtos });
+    } catch (err) {
+      next(err);
+    }
+  },
 
-module.exports = { listar, buscarPorId };
+  async buscarPorId(req, res, next) {
+    try {
+      const produto = await ProdutosService.buscarPorId(req.params.id);
+      return res.status(200).json({ data: produto });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async atualizar(req, res, next) {
+    try {
+      const produto = await ProdutosService.atualizar(req.params.id, req.body);
+      return res.status(200).json({ data: produto });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async remover(req, res, next) {
+    try {
+      await ProdutosService.remover(req.params.id);
+      return res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  },
+};
+
+module.exports = ProdutosController;

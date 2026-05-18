@@ -1,9 +1,13 @@
-const express = require('express');
-const produtosController = require('../controllers/produtos-controller');
+const { Router } = require('express');
+const ProdutosController = require('../controllers/produtos-controller');
+const authMiddleware = require('../middlewares/auth');
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', produtosController.listar);
-router.get('/:id', produtosController.buscarPorId);
+router.post('/', authMiddleware, ProdutosController.cadastrar);
+router.get('/', ProdutosController.listar);
+router.get('/:id', ProdutosController.buscarPorId);
+router.put('/:id', ProdutosController.atualizar);
+router.delete('/:id', ProdutosController.remover);
 
 module.exports = router;

@@ -8,10 +8,7 @@ const router = express.Router();
 
 router.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
-// Rota pública — não exige token
 router.use('/auth', authRoutes);
-
-// Rotas protegidas — token aplicado dentro de cada router
 router.use('/afiliados', afiliadosRoutes);
 router.use('/favoritos', favoritosRoutes);
 router.use('/produtos', produtosRoutes);
