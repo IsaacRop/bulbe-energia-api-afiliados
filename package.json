@@ -3,8 +3,7 @@
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "nodemon": "^3.1.14"
+    "jsonwebtoken": "^9.0.3"
   },
   "name": "bulbe-energia-api-afiliados",
   "version": "1.0.0",
@@ -29,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/IsaacRop/bulbe-energia-api-afiliados/issues"
   },
-  "homepage": "https://github.com/IsaacRop/bulbe-energia-api-afiliados#readme"
+  "homepage": "https://github.com/IsaacRop/bulbe-energia-api-afiliados#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }
