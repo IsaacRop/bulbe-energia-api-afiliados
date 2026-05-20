@@ -14,14 +14,14 @@ const FavoritosService = {
     }
 
     // Validação: duplicado
-    const duplicado = FavoritosModel.findDuplicado(usuarioId, String(produtoId));
+    const duplicado = FavoritosModel.findDuplicado(usuarioId, Number(produtoId));
     if (duplicado) {
       const err = new Error('Este produto já está nos seus favoritos.');
       err.status = 422;
       throw err;
     }
 
-    return FavoritosModel.create({ usuarioId, produtoId: String(produtoId) });
+    return FavoritosModel.create({ usuarioId, produtoId: Number(produtoId) });
   },
 
   async remover(id, usuarioId) {

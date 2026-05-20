@@ -36,6 +36,7 @@ router.use(authMiddleware);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Erro'
+ *     summary: Lista os favoritos do usuário
  */
 
 router.get('/', FavoritosController.listar);

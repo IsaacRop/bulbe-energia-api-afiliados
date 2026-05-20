@@ -23,8 +23,8 @@ const FavoritosController = {
   async remover(req, res, next) {
     try {
       const { id } = req.params;
-      const removido = await FavoritosService.remover(id, req.user.id);
-      return res.status(200).json({ message: 'Favorito removido com sucesso', data: removido });
+      await FavoritosService.remover(id, req.user.id);
+      return res.status(204).send();
     } catch (err) {
       next(err);
     }
