@@ -1,35 +1,18 @@
-const fs = require('fs');
-const path = require('path');
+const db = require('../db/conexão');
 
-const filePath = path.join(__dirname, '../data/users.json');
-
-function load() {
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-}
-
-function save(users) {
-  fs.writeFileSync(filePath, JSON.stringify(users, null, 2));
-}
-
-function findAll() {
-  return load();
+function findByEmail(email) {
+  return db.prepare('SELECT * FROM usuarios WHERE email = ?').get(email);
 }
 
 function findById(id) {
-  return load().find((u) => u.id === id);
+  return db.prepare('SELECT * FROM usuarios WHERE id = ?').get(id);
 }
 
-function findByEmail(email) {
-  return load().find((u) => u.email === email);
+function create({ nome, email, senha, papel = 'cliente' }) {
+  const result = db
+    .prepare('INSERT INTO usuarios (nome, email, senha, papel) VALUES (?, ?, ?, ?)')
+    .run(nome, email, senha, papel);
+  return db.prepare('SELECT * FROM usuarios WHERE id = ?').get(result.lastInsertRowid);
 }
 
-function create({ name, email, password_hash }) {
-  const users = load();
-  const newId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1;
-  const newUser = { id: newId, name, email, password_hash, created_at: new Date().toISOString() };
-  users.push(newUser);
-  save(users);
-  return newUser;
-}
-
-module.exports = { findAll, findById, findByEmail, create };
+module.exports = { findByEmail, findById, create };
