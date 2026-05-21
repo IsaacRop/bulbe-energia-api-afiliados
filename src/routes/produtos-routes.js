@@ -10,7 +10,7 @@ const router = Router();
  *   name: Produtos
  *   description: Gerenciamento de produtos
  */
- 
+
 /**
  * @openapi
  * /produtos:
@@ -31,7 +31,10 @@ const router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Produto'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/Produto'
  *       401:
  *         description: Token ausente ou inválido
  *         content:
@@ -39,13 +42,12 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  *       422:
- *         description: Dados inválidos
+ *         description: Campos obrigatórios ausentes ou inválidos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-
 router.post('/', authMiddleware, ProdutosController.cadastrar);
 
 /**
@@ -67,11 +69,13 @@ router.post('/', authMiddleware, ProdutosController.cadastrar);
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Produto'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Produto'
  */
-
 router.get('/', ProdutosController.listar);
 
 /**
@@ -93,7 +97,10 @@ router.get('/', ProdutosController.listar);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Produto'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/Produto'
  *       404:
  *         description: Produto não encontrado
  *         content:
@@ -101,7 +108,6 @@ router.get('/', ProdutosController.listar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-
 router.get('/:id', ProdutosController.buscarPorId);
 
 /**
@@ -129,7 +135,10 @@ router.get('/:id', ProdutosController.buscarPorId);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Produto'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/Produto'
  *       404:
  *         description: Produto não encontrado
  *         content:
@@ -143,7 +152,6 @@ router.get('/:id', ProdutosController.buscarPorId);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-
 router.put('/:id', ProdutosController.atualizar);
 
 /**

@@ -9,7 +9,7 @@ const router = express.Router();
  *   name: Afiliados
  *   description: Gerenciamento de afiliados
  */
- 
+
 /**
  * @openapi
  * /afiliados:
@@ -26,8 +26,8 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Afiliado'
  */
-
 router.get('/', afiliadosController.listar);
+
 /**
  * @openapi
  * /afiliados:
@@ -54,10 +54,37 @@ router.get('/', afiliadosController.listar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
+router.post('/', afiliadosController.cadastrar);
 
-
+/**
+ * @openapi
+ * /afiliados/{id}/produtos:
+ *   get:
+ *     tags: [Afiliados]
+ *     summary: Lista os produtos de um afiliado pelo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do afiliado
+ *     responses:
+ *       200:
+ *         description: Lista de produtos retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Produto'
+ *       404:
+ *         description: Afiliado não encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Erro'
+ */
 router.get('/:id/produtos', afiliadosController.listarProdutos);
-
-router.post('/',afiliadosController.cadastrar);
 
 module.exports = router;
