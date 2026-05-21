@@ -21,7 +21,9 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS afiliados (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
     nome  TEXT    NOT NULL UNIQUE,
-    url   TEXT
+    slug  TEXT    NOT NULL UNIQUE,
+    logo  TEXT,
+    site  TEXT
   );
 
   CREATE TABLE IF NOT EXISTS categorias (
@@ -35,6 +37,7 @@ db.exec(`
     descricao     TEXT,
     preco         REAL    NOT NULL,
     imagem        TEXT,
+    link_afiliado TEXT,
     afiliado_id   INTEGER NOT NULL REFERENCES afiliados(id),
     categoria_id  INTEGER REFERENCES categorias(id)
   );

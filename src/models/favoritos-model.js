@@ -1,29 +1,37 @@
-const db = require('../db/conexão');
+const db = require('../db/conexao');
 
-const FavoritosModel = {
-  findByUsuario(usuarioId) {
-    return db.prepare('SELECT * FROM favoritos WHERE usuario_id = ?').all(usuarioId);
-  },
+const SELECT_FAVORITO = `
+  SELECT f.id, f.usuario_id, f.produto_id, p.nome AS produto_nome, p.preco, p.imagem
+  FROM favoritos f
+  JOIN produtos p ON f.produto_id = p.id
+`;
 
-  findDuplicado(usuarioId, produtoId) {
-    return db.prepare('SELECT * FROM favoritos WHERE usuario_id = ? AND produto_id = ?').get(usuarioId, produtoId);
-  },
+function findByUsuario(usuarioId) {
+  return db.prepare(`${SELECT_FAVORITO} WHERE f.usuario_id = ?`).all(Number(usuarioId));
+}
 
-  create({ usuarioId, produtoId }) {
-    const result = db
-      .prepare('INSERT INTO favoritos (usuario_id, produto_id) VALUES (?, ?)')
-      .run(usuarioId, produtoId);
-    return db.prepare('SELECT * FROM favoritos WHERE id = ?').get(result.lastInsertRowid);
-  },
+function findDuplicado(usuarioId, produtoId) {
+  return db.prepare(
+    'SELECT * FROM favoritos WHERE usuario_id = ? AND produto_id = ?'
+  ).get(Number(usuarioId), Number(produtoId));
+}
 
-  deleteById(id, usuarioId) {
-    const favorito = db
-      .prepare('SELECT * FROM favoritos WHERE id = ? AND usuario_id = ?')
-      .get(id, usuarioId);
-    if (!favorito) return null;
-    db.prepare('DELETE FROM favoritos WHERE id = ? AND usuario_id = ?').run(id, usuarioId);
-    return favorito;
-  },
-};
+function create({ usuarioId, produtoId }) {
+  const result = db.prepare(
+    'INSERT INTO favoritos (usuario_id, produto_id) VALUES (?, ?)'
+  ).run(Number(usuarioId), Number(produtoId));
 
-module.exports = FavoritosModel;
+  return db.prepare(`${SELECT_FAVORITO} WHERE f.id = ?`).get(result.lastInsertRowid);
+}
+
+function deleteById(id, usuarioId) {
+  const favorito = db.prepare('SELECT * FROM favoritos WHERE id = ? AND usuario_id = ?')
+    .get(Number(id), Number(usuarioId));
+
+  if (!favorito) return null;
+
+  db.prepare('DELETE FROM favoritos WHERE id = ?').run(Number(id));
+  return favorito;
+}
+
+module.exports = { findByUsuario, findDuplicado, create, deleteById };
