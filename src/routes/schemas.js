@@ -16,6 +16,56 @@
  *           type: string
  *           example: Mensagem de erro
  *
+ *     RegisterInput:
+ *       type: object
+ *       required: [nome, email, senha]
+ *       properties:
+ *         nome:
+ *           type: string
+ *           example: João Silva
+ *         email:
+ *           type: string
+ *           example: joao@email.com
+ *         senha:
+ *           type: string
+ *           example: senha123
+ *
+ *     LoginInput:
+ *       type: object
+ *       required: [email, senha]
+ *       properties:
+ *         email:
+ *           type: string
+ *           example: joao@email.com
+ *         senha:
+ *           type: string
+ *           example: senha123
+ *
+ *     Usuario:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         nome:
+ *           type: string
+ *           example: João Silva
+ *         email:
+ *           type: string
+ *           example: joao@email.com
+ *         papel:
+ *           type: string
+ *           example: user
+ *
+ *     LoginResponse:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *         user:
+ *           $ref: '#/components/schemas/Usuario'
+ *
  *     Afiliado:
  *       type: object
  *       properties:
