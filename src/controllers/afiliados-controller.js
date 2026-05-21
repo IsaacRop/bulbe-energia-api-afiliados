@@ -14,8 +14,8 @@ function cadastrar(req, res, next) {
     const novoAfiliado = afiliadoService.cadastrar(req.body);
     return res.status(201).json(novoAfiliado);
   } catch (err) {
-    if(err.status === 422) {
-      return res.status(422).json({erro: err.message});
+    if (err.status === 422) {
+      return res.status(422).json({ erro: err.message });
     }
     return next(err);
   }

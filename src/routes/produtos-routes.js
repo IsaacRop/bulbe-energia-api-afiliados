@@ -116,6 +116,8 @@ router.get('/:id', ProdutosController.buscarPorId);
  *   put:
  *     tags: [Produtos]
  *     summary: Atualiza um produto pelo ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -152,6 +154,7 @@ router.get('/:id', ProdutosController.buscarPorId);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
+
 router.put('/:id', ProdutosController.atualizar);
 
 /**
@@ -160,6 +163,8 @@ router.put('/:id', ProdutosController.atualizar);
  *   delete:
  *     tags: [Produtos]
  *     summary: Remove um produto pelo ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -177,6 +182,6 @@ router.put('/:id', ProdutosController.atualizar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-router.delete('/:id', ProdutosController.remover);
+router.delete('/:id', authMiddleware, ProdutosController.remover);
 
 module.exports = router;

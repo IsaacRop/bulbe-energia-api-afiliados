@@ -58,8 +58,8 @@ Cliente ──HTTP──▶ Routes ──▶ Controllers ──▶ Services ─�
 | Dev server | Nodemon |
 | Lint | ESLint (RNF-03) |
 | Documentação | OpenAPI 3.1 (RNF-05) |
-| Autenticação | JWT (RNF-02) — *a ser adicionado na Sprint 4* |
-| Banco de Dados | *a ser definido na Sprint 3* |
+| Autenticação | JWT + bcryptjs (RNF-02) |
+| Banco de Dados | SQLite via better-sqlite3 |
 
 ---
 
@@ -82,7 +82,7 @@ npm install
 
 # 3. Configurar variáveis de ambiente
 cp .env.example .env
-# edite o .env conforme necessário
+# edite o .env conforme necessário (JWT_SECRET obrigatório)
 
 # 4. Subir o servidor em modo desenvolvimento (com hot reload)
 npm run dev
@@ -92,6 +92,15 @@ npm start
 ```
 
 A API ficará disponível em `http://localhost:3000/api/v1`.
+
+> **Banco de dados:** o SQLite é criado automaticamente na raiz do projeto (`bulbe.db`) na primeira execução. Não é necessário nenhum passo adicional de migração.
+
+### Variáveis de ambiente
+
+| Variável | Descrição | Obrigatória |
+|---|---|---|
+| `PORT` | Porta do servidor (padrão: 3000) | Não |
+| `JWT_SECRET` | Chave secreta para assinar tokens JWT | Sim |
 
 ### Scripts disponíveis
 
@@ -143,10 +152,13 @@ bulbe-energia-api-afiliados/
 │   ├── services/             # Regra de negócio
 │   ├── models/               # Entidades e persistência
 │   ├── routes/               # Definição dos endpoints
-│   ├── middlewares/          # Auth, tratamento de erros, logs
-│   ├── config/               # Configuração de ambiente e banco
+│   ├── middlewares/          # Auth JWT, tratamento de erros
+│   ├── config/               # Configuração de ambiente
+│   ├── db/
+│   │   └── conexão.js        # Conexão SQLite + criação das tabelas
 │   ├── app.js                # Instancia o Express e middlewares
 │   └── server.js             # Sobe o servidor HTTP
+├── bulbe.db                  # Banco SQLite (gerado automaticamente)
 ├── tests/                    # Testes automatizados
 ├── .env.example              # Modelo de variáveis de ambiente
 ├── .gitignore
@@ -164,9 +176,9 @@ bulbe-energia-api-afiliados/
 |--------|------|--------|
 | Kickoff | Apresentação dos trabalhos do semestre anterior | ✅ Concluída |
 | Sprint 1 | Setup + Elicitação de Requisitos | ✅ Concluída |
-| Sprint 2 | Modelagem + Arquitetura + CRUD básico | 🔄 Em andamento |
-| Sprint 3 | Banco de Dados + ORM + Testes | ⏳ Aguardando |
-| Sprint 4 | Autenticação + Documentação Final | ⏳ Aguardando |
+| Sprint 2 | Modelagem + Arquitetura + CRUD básico | ✅ Concluída |
+| Sprint 3 | Banco de Dados (SQLite) + Autenticação JWT | 🔄 Em andamento |
+| Sprint 4 | Testes + Documentação Final | ⏳ Aguardando |
 
 ---
 
