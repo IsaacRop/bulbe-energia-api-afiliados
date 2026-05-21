@@ -1,25 +1,23 @@
-const afiliados = require('../data/afiliados.json');
+const db = require('../db/conexao');
 
 function findAll() {
-  return afiliados;
+  return db.prepare('SELECT * FROM afiliados').all();
 }
 
 function findById(id) {
-  return afiliados.find((a) => a.id === Number(id));
+  return db.prepare('SELECT * FROM afiliados WHERE id = ?').get(Number(id));
 }
 
-function findBySlug(slug){
-  return afiliados.find((a) => a.slug === slug);
+function findBySlug(slug) {
+  return db.prepare('SELECT * FROM afiliados WHERE slug = ?').get(slug);
 }
 
-function create(dados) {
-  const novoId = afiliados.length > 0 ? Math.max(...afiliados.map((a) => a.id)) + 1 : 1;
+function create({ nome, slug, logo, site }) {
+  const result = db.prepare(
+    'INSERT INTO afiliados (nome, slug, logo, site) VALUES (?, ?, ?, ?)'
+  ).run(nome, slug, logo, site);
 
-  const novoAfiliado = {id: novoId, ...dados};
-  afiliados.push(novoAfiliado);
-  return novoAfiliado;
+  return db.prepare('SELECT * FROM afiliados WHERE id = ?').get(result.lastInsertRowid);
 }
-
-
 
 module.exports = { findAll, findById, findBySlug, create };

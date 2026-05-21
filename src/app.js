@@ -4,6 +4,7 @@ const routes = require('./routes');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const { join } = require('node:path');
+const errorHandler = require('./middlewares/errorHandler');
 
 
 //ESPECIFICAÇÕES DO SWAGGER
@@ -68,10 +69,7 @@ app.use((req, res) => {
 });
 
 //ERRO 500
-app.use((err, req, res, _next) => {
-  console.error(err);
-  res.status(err.status || 500).json({ error: err.message || 'Erro interno do servidor' });
-});
+app.use(errorHandler);
 
 //EXPORTAR
 module.exports = app;

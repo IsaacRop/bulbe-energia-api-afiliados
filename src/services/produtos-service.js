@@ -13,7 +13,9 @@ const ProdutosService = {
     return ProdutosModel.create(dados);
   },
 
-  listarTodos() {
+  listar({ search, categoria } = {}) {
+    if (search) return ProdutosModel.findBySearch(search);
+    if (categoria) return ProdutosModel.findByCategoria(categoria);
     return ProdutosModel.findAll();
   },
 

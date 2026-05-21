@@ -1,10 +1,5 @@
-// src/db/conexao.js
-import Database from 'better-sqlite3';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = dirname(__filename);
+const Database = require('better-sqlite3');
+const { join } = require('node:path');
 
 const DB_PATH = join(__dirname, '..', '..', 'bulbe.db');
 
@@ -26,7 +21,9 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS afiliados (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
     nome  TEXT    NOT NULL UNIQUE,
-    url   TEXT
+    slug  TEXT    NOT NULL UNIQUE,
+    logo  TEXT,
+    site  TEXT
   );
 
   CREATE TABLE IF NOT EXISTS categorias (
@@ -40,6 +37,7 @@ db.exec(`
     descricao     TEXT,
     preco         REAL    NOT NULL,
     imagem        TEXT,
+    link_afiliado TEXT,
     afiliado_id   INTEGER NOT NULL REFERENCES afiliados(id),
     categoria_id  INTEGER REFERENCES categorias(id)
   );
@@ -52,4 +50,4 @@ db.exec(`
   );
 `);
 
-export default db;
+module.exports = db;

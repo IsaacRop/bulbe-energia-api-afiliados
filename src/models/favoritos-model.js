@@ -1,37 +1,37 @@
-// Dados em memória — será substituído na Sprint 3
-const favoritos = [];
+const db = require('../db/conexao');
 
-const FavoritosModel = {
-  findByUsuario(usuarioId) {
-    return favoritos.filter((f) => f.usuarioId === usuarioId);
-  },
+const SELECT_FAVORITO = `
+  SELECT f.id, f.usuario_id, f.produto_id, p.nome AS produto_nome, p.preco, p.imagem
+  FROM favoritos f
+  JOIN produtos p ON f.produto_id = p.id
+`;
 
-  findDuplicado(usuarioId, produtoId) {
-    return favoritos.find(
-      (f) => f.usuarioId === usuarioId && f.produtoId === produtoId
-    );
-  },
+function findByUsuario(usuarioId) {
+  return db.prepare(`${SELECT_FAVORITO} WHERE f.usuario_id = ?`).all(Number(usuarioId));
+}
 
-  create({ usuarioId, produtoId }) {
-    const novo = {
-      id: String(Date.now()),
-      usuarioId,
-      produtoId,
-      criadoEm: new Date().toISOString(),
-    };
-    favoritos.push(novo);
-    return novo;
-  },
+function findDuplicado(usuarioId, produtoId) {
+  return db.prepare(
+    'SELECT * FROM favoritos WHERE usuario_id = ? AND produto_id = ?'
+  ).get(Number(usuarioId), Number(produtoId));
+}
 
-  deleteById(id, usuarioId) {
-    const index = favoritos.findIndex(
-      (f) => f.id === id && f.usuarioId === usuarioId
-    );
-    if (index === -1) return null;
-    const [removido] = favoritos.splice(index, 1);
-    return removido;
-  },
-};
+function create({ usuarioId, produtoId }) {
+  const result = db.prepare(
+    'INSERT INTO favoritos (usuario_id, produto_id) VALUES (?, ?)'
+  ).run(Number(usuarioId), Number(produtoId));
 
-module.exports = FavoritosModel;
+  return db.prepare(`${SELECT_FAVORITO} WHERE f.id = ?`).get(result.lastInsertRowid);
+}
 
+function deleteById(id, usuarioId) {
+  const favorito = db.prepare('SELECT * FROM favoritos WHERE id = ? AND usuario_id = ?')
+    .get(Number(id), Number(usuarioId));
+
+  if (!favorito) return null;
+
+  db.prepare('DELETE FROM favoritos WHERE id = ?').run(Number(id));
+  return favorito;
+}
+
+module.exports = { findByUsuario, findDuplicado, create, deleteById };

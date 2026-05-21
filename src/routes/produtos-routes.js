@@ -144,7 +144,7 @@ router.get('/:id', ProdutosController.buscarPorId);
  *               $ref: '#/components/schemas/Erro'
  */
 
-router.put('/:id', ProdutosController.atualizar);
+router.put('/:id', authMiddleware, ProdutosController.atualizar);
 
 /**
  * @openapi
@@ -169,6 +169,6 @@ router.put('/:id', ProdutosController.atualizar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-router.delete('/:id', ProdutosController.remover);
+router.delete('/:id', authMiddleware, ProdutosController.remover);
 
 module.exports = router;
