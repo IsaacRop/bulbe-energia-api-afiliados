@@ -52,6 +52,16 @@
  *           type: string
  *           example: https://shopee.com.br
  *
+ *     Categoria:
+ *       type: object
+ *       properties:
+ *         nome:
+ *           type: string
+ *           example: Energia Solar
+ *         slug:
+ *           type: string
+ *           example: energia-solar
+ *
  *     Produto:
  *       type: object
  *       properties:
