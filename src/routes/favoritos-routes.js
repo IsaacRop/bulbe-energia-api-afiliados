@@ -12,7 +12,7 @@ router.use(authMiddleware);
  *   name: Favoritos
  *   description: Gerenciamento de favoritos do usuário autenticado
  */
- 
+
 /**
  * @openapi
  * /favoritos:
@@ -27,9 +27,12 @@ router.use(authMiddleware);
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Favorito'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Favorito'
  *       401:
  *         description: Token ausente ou inválido
  *         content:
@@ -37,7 +40,6 @@ router.use(authMiddleware);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-
 router.get('/', FavoritosController.listar);
 
 /**
@@ -60,7 +62,10 @@ router.get('/', FavoritosController.listar);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Favorito'
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/Favorito'
  *       401:
  *         description: Token ausente ou inválido
  *         content:
@@ -68,7 +73,6 @@ router.get('/', FavoritosController.listar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-
 router.post('/', FavoritosController.adicionar);
 
 /**
@@ -84,11 +88,21 @@ router.post('/', FavoritosController.adicionar);
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *         description: ID do favorito a ser removido
  *     responses:
- *       204:
+ *       200:
  *         description: Favorito removido com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Favorito removido com sucesso
+ *                 data:
+ *                   $ref: '#/components/schemas/Favorito'
  *       401:
  *         description: Token ausente ou inválido
  *         content:
@@ -102,7 +116,6 @@ router.post('/', FavoritosController.adicionar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-
 router.delete('/:id', FavoritosController.remover);
 
 module.exports = router;

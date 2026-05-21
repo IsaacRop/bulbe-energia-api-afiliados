@@ -16,6 +16,56 @@
  *           type: string
  *           example: Mensagem de erro
  *
+ *     RegisterInput:
+ *       type: object
+ *       required: [nome, email, senha]
+ *       properties:
+ *         nome:
+ *           type: string
+ *           example: João Silva
+ *         email:
+ *           type: string
+ *           example: joao@email.com
+ *         senha:
+ *           type: string
+ *           example: senha123
+ *
+ *     LoginInput:
+ *       type: object
+ *       required: [email, senha]
+ *       properties:
+ *         email:
+ *           type: string
+ *           example: joao@email.com
+ *         senha:
+ *           type: string
+ *           example: senha123
+ *
+ *     Usuario:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         nome:
+ *           type: string
+ *           example: João Silva
+ *         email:
+ *           type: string
+ *           example: joao@email.com
+ *         papel:
+ *           type: string
+ *           example: user
+ *
+ *     LoginResponse:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *         user:
+ *           $ref: '#/components/schemas/Usuario'
+ *
  *     Afiliado:
  *       type: object
  *       properties:
@@ -52,6 +102,16 @@
  *           type: string
  *           example: https://shopee.com.br
  *
+ *     Categoria:
+ *       type: object
+ *       properties:
+ *         nome:
+ *           type: string
+ *           example: Energia Solar
+ *         slug:
+ *           type: string
+ *           example: energia-solar
+ *
  *     Produto:
  *       type: object
  *       properties:
@@ -72,7 +132,7 @@
  *           example: carregador-painel.jpg
  *         linkAfiliado:
  *           type: string
- *           example: https://www.amazon.com.br/ALLPOWERS-Carregador-dobr%C3%A1vel-carregamento-smartphone/dp/B0FG2SGM6X/ref=sr_1_5?sr=8-5
+ *           example: https://www.amazon.com.br/...
  *         loja:
  *           type: string
  *           example: Amazon
@@ -99,7 +159,7 @@
  *
  *     ProdutoInput:
  *       type: object
- *       required: [nome, preco, categoria, imagem, linkAfiliado, loja, lojalogo, descricao]
+ *       required: [nome, preco, categoria, loja]
  *       properties:
  *         nome:
  *           type: string
@@ -115,7 +175,7 @@
  *           example: carregador-painel.jpg
  *         linkAfiliado:
  *           type: string
- *           example: https://www.amazon.com.br/ALLPOWERS-Carregador-dobr%C3%A1vel-carregamento-smartphone/dp/B0FG2SGM6X/ref=sr_1_5?sr=8-5
+ *           example: https://www.amazon.com.br/...
  *         loja:
  *           type: string
  *           example: Amazon
@@ -139,15 +199,23 @@
  *         totalstar:
  *           type: number
  *           example: 0
+ *
  *     Favorito:
  *       type: object
  *       properties:
  *         id:
- *           type: integer
- *           example: 1
+ *           type: string
+ *           example: "1716123456789"
+ *         usuarioId:
+ *           type: string
+ *           example: "1"
  *         produtoId:
  *           type: integer
  *           example: 3
+ *         criadoEm:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-05-20T14:32:01.000Z"
  *
  *     FavoritoInput:
  *       type: object

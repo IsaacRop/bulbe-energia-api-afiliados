@@ -12,12 +12,11 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.3',
     info: {
-      title: 'Bulbe Energia API',
+      title: 'Bulbe Afiliados API',
       version: '1.0.0',
       description:
-        'API REST para gerenciamento de usinas de energia renovável do sistema ' +
-        'Bulbe Energia. Permite listar, consultar e cadastrar usinas solares, ' +
-        'eólicas, hidrelétricas e de biomassa.',
+        'API REST para gerenciamento do programa de afiliados da ' +
+        'Bulbe Energia. Permite listar, consultar e cadastrar produtos, afiliados e favoritos.',
       contact: {
         name: 'Equipe Bulbe Energia',
         email: 'seuemail@alunos.ibmec.edu.br',
@@ -56,9 +55,7 @@ app.use((req, res, next) => {
 //Documentação — Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get('/api-docs.json', (req, res) => {
-  res.json(swaggerDocument);
-});
+app.get('/api-docs.json', (req, res) => res.json(swaggerDocument));
 
 //ROTAS
 app.use('/api/v1', routes);
