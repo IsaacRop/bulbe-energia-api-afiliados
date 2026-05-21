@@ -1,37 +1,29 @@
-// Dados em memória — será substituído na Sprint 3
-const favoritos = [];
+const db = require('../db/conexão');
 
 const FavoritosModel = {
   findByUsuario(usuarioId) {
-    return favoritos.filter((f) => f.usuarioId === usuarioId);
+    return db.prepare('SELECT * FROM favoritos WHERE usuario_id = ?').all(usuarioId);
   },
 
   findDuplicado(usuarioId, produtoId) {
-    return favoritos.find(
-      (f) => f.usuarioId === usuarioId && f.produtoId === produtoId
-    );
+    return db.prepare('SELECT * FROM favoritos WHERE usuario_id = ? AND produto_id = ?').get(usuarioId, produtoId);
   },
 
   create({ usuarioId, produtoId }) {
-    const novo = {
-      id: String(Date.now()),
-      usuarioId,
-      produtoId,
-      criadoEm: new Date().toISOString(),
-    };
-    favoritos.push(novo);
-    return novo;
+    const result = db
+      .prepare('INSERT INTO favoritos (usuario_id, produto_id) VALUES (?, ?)')
+      .run(usuarioId, produtoId);
+    return db.prepare('SELECT * FROM favoritos WHERE id = ?').get(result.lastInsertRowid);
   },
 
   deleteById(id, usuarioId) {
-    const index = favoritos.findIndex(
-      (f) => f.id === id && f.usuarioId === usuarioId
-    );
-    if (index === -1) return null;
-    const [removido] = favoritos.splice(index, 1);
-    return removido;
+    const favorito = db
+      .prepare('SELECT * FROM favoritos WHERE id = ? AND usuario_id = ?')
+      .get(id, usuarioId);
+    if (!favorito) return null;
+    db.prepare('DELETE FROM favoritos WHERE id = ? AND usuario_id = ?').run(id, usuarioId);
+    return favorito;
   },
 };
 
 module.exports = FavoritosModel;
-
