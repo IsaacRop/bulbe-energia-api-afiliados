@@ -12,7 +12,8 @@ const ProdutosController = {
 
   async listar(req, res, next) {
     try {
-      const produtos = await ProdutosService.listarTodos();
+      const { search, categoria } = req.query;
+      const produtos = ProdutosService.listar({ search, categoria });
       return res.status(200).json({ data: produtos });
     } catch (err) {
       next(err);
@@ -21,7 +22,7 @@ const ProdutosController = {
 
   async buscarPorId(req, res, next) {
     try {
-      const produto = await ProdutosService.buscarPorId(req.params.id);
+      const produto = ProdutosService.buscarPorId(req.params.id);
       return res.status(200).json({ data: produto });
     } catch (err) {
       next(err);

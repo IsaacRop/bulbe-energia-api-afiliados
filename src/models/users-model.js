@@ -1,4 +1,4 @@
-const db = require('../db/conexão');
+const db = require('../db/conexao');
 
 function findByEmail(email) {
   return db.prepare('SELECT * FROM usuarios WHERE email = ?').get(email);
@@ -9,9 +9,10 @@ function findById(id) {
 }
 
 function create({ nome, email, senha, papel = 'cliente' }) {
-  const result = db
-    .prepare('INSERT INTO usuarios (nome, email, senha, papel) VALUES (?, ?, ?, ?)')
-    .run(nome, email, senha, papel);
+  const result = db.prepare(
+    'INSERT INTO usuarios (nome, email, senha, papel) VALUES (?, ?, ?, ?)'
+  ).run(nome, email, senha, papel);
+
   return db.prepare('SELECT * FROM usuarios WHERE id = ?').get(result.lastInsertRowid);
 }
 
