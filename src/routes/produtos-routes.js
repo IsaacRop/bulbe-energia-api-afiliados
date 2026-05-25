@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const ProdutosController = require('../controllers/produtos-controller');
 const authMiddleware = require('../middlewares/auth');
+const adminMiddleware = require('../middlewares/adminMiddleware');
 
 const router = Router();
 
@@ -41,6 +42,12 @@ const router = Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Erro'
+ *       403:
+ *         description: Acesso negado. Apenas administradores podem cadastrar produtos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Erro'
  *       422:
  *         description: Campos obrigatórios ausentes ou inválidos
  *         content:
@@ -48,7 +55,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-router.post('/', authMiddleware, ProdutosController.cadastrar);
+router.post('/', authMiddleware, adminMiddleware, ProdutosController.cadastrar);
 
 /**
  * @openapi
@@ -63,6 +70,12 @@ router.post('/', authMiddleware, ProdutosController.cadastrar);
  *         schema:
  *           type: string
  *         description: Termo para busca por nome ou descrição
+ *       - in: query
+ *         name: categoria
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Filtrar produtos por categoria (ex. "Energia Solar")
  *     responses:
  *       200:
  *         description: Lista retornada com sucesso
@@ -155,7 +168,7 @@ router.get('/:id', ProdutosController.buscarPorId);
  *               $ref: '#/components/schemas/Erro'
  */
 
-router.put('/:id', ProdutosController.atualizar);
+router.put('/:id', authMiddleware, adminMiddleware, ProdutosController.atualizar);
 
 /**
  * @openapi
@@ -182,6 +195,6 @@ router.put('/:id', ProdutosController.atualizar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-router.delete('/:id', authMiddleware, ProdutosController.remover);
+router.delete('/:id', authMiddleware, adminMiddleware, ProdutosController.remover);
 
 module.exports = router;
