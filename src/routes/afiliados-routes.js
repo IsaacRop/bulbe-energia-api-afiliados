@@ -24,9 +24,12 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Afiliado'
+ *               type: object
+ *               properties:
+ *                data:
+ *                  type: array  
+ *                  items:
+ *                    $ref: '#/components/schemas/Afiliado'
  */
 router.get('/', afiliadosController.listar);
 
