@@ -1,5 +1,7 @@
 const express = require('express');
 const afiliadosController = require('../controllers/afiliados-controller');
+const authMiddleware = require('../middlewares/auth');
+const adminMiddleware = require('../middlewares/adminMiddleware');
 
 const router = express.Router();
 
@@ -54,7 +56,7 @@ router.get('/', afiliadosController.listar);
  *             schema:
  *               $ref: '#/components/schemas/Erro'
  */
-router.post('/', afiliadosController.cadastrar);
+router.post('/', authMiddleware, adminMiddleware, afiliadosController.cadastrar);
 
 /**
  * @openapi
