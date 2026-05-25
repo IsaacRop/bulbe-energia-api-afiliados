@@ -13,11 +13,12 @@ const ProdutosService = {
     return ProdutosModel.create(dados);
   },
 
-  listar({ search, categoria } = {}) {
-    if (search) return ProdutosModel.findBySearch(search);
-    if (categoria) return ProdutosModel.findByCategoria(categoria);
-    return ProdutosModel.findAll();
-  },
+listar({ search, categoria } = {}) {
+  if (search && categoria) return ProdutosModel.findBySearchAndCategoria(search, categoria);
+  if (search) return ProdutosModel.findBySearch(search);
+  if (categoria) return ProdutosModel.findByCategoria(categoria);
+  return ProdutosModel.findAll();
+},
 
   buscarPorId(id) {
     const produto = ProdutosModel.findById(id);
