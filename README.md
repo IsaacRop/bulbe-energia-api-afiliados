@@ -101,6 +101,8 @@ A API ficará disponível em `http://localhost:3000/api/v1`.
 |---|---|---|
 | `PORT` | Porta do servidor (padrão: 3000) | Não |
 | `JWT_SECRET` | Chave secreta para assinar tokens JWT | Sim |
+| `JWT_EXPIRES_IN` | Tempo de expiração do token JWT (padrão: `1d`) | Não |
+| `FRONTEND_URL` | URL de origem permitida pelo CORS (ex: `http://localhost:3000`) | Não* |
 
 ### Scripts disponíveis
 
