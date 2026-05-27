@@ -13,15 +13,23 @@ const FavoritosService = {
       throw err;
     }
 
+    // Validação: deve ser inteiro positivo
+    const id = Number(produtoId);
+    if (!Number.isInteger(id) || id <= 0) {
+      const err = new Error('produtoId deve ser um número inteiro válido.');
+      err.status = 422;
+      throw err;
+    }
+
     // Validação: duplicado
-    const duplicado = FavoritosModel.findDuplicado(usuarioId, Number(produtoId));
+    const duplicado = FavoritosModel.findDuplicado(usuarioId, id);
     if (duplicado) {
       const err = new Error('Este produto já está nos seus favoritos.');
       err.status = 422;
       throw err;
     }
 
-    return FavoritosModel.create({ usuarioId, produtoId: Number(produtoId) });
+    return FavoritosModel.create({ usuarioId, produtoId: id });
   },
 
   async remover(id, usuarioId) {
