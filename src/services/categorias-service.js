@@ -3,13 +3,6 @@ const CategoriasModel = require('../models/categorias-model');
 const CategoriasService = {
   async listarProdutosPorCategoria(categoria) {
     const produtosFiltrados = CategoriasModel.findByCategoria(categoria);
-
-    if (produtosFiltrados.length === 0) {
-      const err = new Error('Categoria não encontrada.');
-      err.status = 404;
-      throw err;
-    }
-    
     return produtosFiltrados;
   },
 
