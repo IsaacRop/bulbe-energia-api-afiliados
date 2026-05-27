@@ -38,6 +38,7 @@ db.exec(`
     preco         REAL    NOT NULL,
     imagem        TEXT,
     link_afiliado TEXT,
+    tags_home     TEXT,
     afiliado_id   INTEGER NOT NULL REFERENCES afiliados(id),
     categoria_id  INTEGER REFERENCES categorias(id)
   );
@@ -49,5 +50,12 @@ db.exec(`
     UNIQUE(usuario_id, produto_id)
   );
 `);
+
+// Migration: add tags_home column to existing databases (safe to run multiple times)
+try {
+  db.exec('ALTER TABLE produtos ADD COLUMN tags_home TEXT');
+} catch (_) {
+  // Column already exists — ignore
+}
 
 module.exports = db;
