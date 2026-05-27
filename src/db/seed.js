@@ -4,8 +4,22 @@ const bcrypt = require('bcryptjs');
 const produtosJson = require('../data/produtos.json');
 
 const total = db.prepare('SELECT COUNT(*) as n FROM produtos').get();
-if (total.n > 0) {
-  console.log('Seed já executado. Banco possui dados — pulando.');
+const jaSeeded = total.n > 0;
+
+// Se o banco já tem dados mas falta a coluna tags_home, preenche (migration de dados)
+if (jaSeeded) {
+  const updateTagsHome = db.prepare('UPDATE produtos SET tags_home = ? WHERE id = ?');
+  const semTag = db.prepare('SELECT COUNT(*) as n FROM produtos WHERE tags_home IS NULL').get();
+  if (semTag.n > 0) {
+    console.log('Atualizando tags_home nos produtos existentes...');
+    for (const p of produtosJson) {
+      const tag = p.tags_home ? p.tags_home.join(',') : null;
+      updateTagsHome.run(tag, p.id);
+    }
+    console.log(`✅ tags_home atualizado em ${semTag.n} produto(s).`);
+  } else {
+    console.log('Seed já executado e tags_home já preenchido — nada a fazer.');
+  }
   process.exit(0);
 }
 
@@ -30,8 +44,8 @@ for (const c of categorias) insertCategoria.run(c);
 const getAfiliado = db.prepare('SELECT id FROM afiliados WHERE nome = ?');
 const getCategoria = db.prepare('SELECT id FROM categorias WHERE nome = ?');
 const insertProduto = db.prepare(`
-  INSERT INTO produtos (nome, descricao, preco, imagem, link_afiliado, afiliado_id, categoria_id)
-  VALUES (@nome, @descricao, @preco, @imagem, @link_afiliado, @afiliado_id, @categoria_id)
+  INSERT INTO produtos (nome, descricao, preco, imagem, link_afiliado, tags_home, afiliado_id, categoria_id)
+  VALUES (@nome, @descricao, @preco, @imagem, @link_afiliado, @tags_home, @afiliado_id, @categoria_id)
 `);
 
 let produtosInseridos = 0;
@@ -48,6 +62,7 @@ for (const p of produtosJson) {
     preco: p.preco,
     imagem: p.imagem || null,
     link_afiliado: p.linkAfiliado || null,
+    tags_home: p.tags_home ? p.tags_home.join(',') : null,
     afiliado_id: afiliado.id,
     categoria_id: categoria ? categoria.id : null,
   });
