@@ -2,6 +2,7 @@ const db = require('../db/conexao');
 
 const SELECT_PRODUTO = `
   SELECT p.id, p.nome, p.descricao, p.preco, p.imagem, p.link_afiliado AS linkAfiliado,
+         p.tags_home,
          a.nome AS loja, a.logo AS lojalogo, c.nome AS categoria
   FROM produtos p
   LEFT JOIN afiliados a ON p.afiliado_id = a.id
