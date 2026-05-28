@@ -10,6 +10,13 @@ const ProdutosService = {
       throw err;
     }
 
+    const precoNum = Number(preco);
+    if (isNaN(precoNum) || precoNum <= 0) {
+      const err = new Error('O preço deve ser um número maior que zero.');
+      err.status = 422;
+      throw err;
+    }
+
     return ProdutosModel.create(dados);
   },
 
@@ -42,10 +49,13 @@ const ProdutosService = {
       throw err;
     }
 
-    if (dados.preco !== undefined && Number(dados.preco) <= 0) {
-      const err = new Error('O preço do produto deve ser maior que zero.');
-      err.status = 422;
-      throw err;
+    if (dados.preco !== undefined) {
+      const precoNum = Number(dados.preco);
+      if (isNaN(precoNum) || precoNum <= 0) {
+        const err = new Error('O preço deve ser um número maior que zero.');
+        err.status = 422;
+        throw err;
+      }
     }
 
     const produto = ProdutosModel.updateById(id, dados);

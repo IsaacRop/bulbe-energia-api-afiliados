@@ -1,5 +1,14 @@
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
 const app = require('../src/app');
+
+function gerarTokenAdmin() {
+  return jwt.sign(
+    { sub: 9999, nome: 'Admin Teste', papel: 'admin' },
+    process.env.JWT_SECRET || 'bulbe_energia_jwt_secret_key_2024',
+    { expiresIn: '1h' }
+  );
+}
 
 describe('Produtos', () => {
   test('GET /api/v1/produtos retorna 200 e data array', async () => {
@@ -42,5 +51,47 @@ describe('Produtos', () => {
   test('DELETE /api/v1/produtos/1 sem token retorna 401', async () => {
     const res = await request(app).delete('/api/v1/produtos/1');
     expect(res.statusCode).toBe(401);
+  });
+
+  // --- Issue #78: validação de preco ---
+
+  test('PUT /produtos/:id com preco "gratis" (string) retorna 422', async () => {
+    const token = gerarTokenAdmin();
+    const res = await request(app)
+      .put('/api/v1/produtos/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ preco: 'gratis' });
+    expect(res.statusCode).toBe(422);
+    expect(res.body.erro).toMatch(/preço/i);
+  });
+
+  test('PUT /produtos/:id com preco 0 retorna 422', async () => {
+    const token = gerarTokenAdmin();
+    const res = await request(app)
+      .put('/api/v1/produtos/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ preco: 0 });
+    expect(res.statusCode).toBe(422);
+    expect(res.body.erro).toMatch(/preço/i);
+  });
+
+  test('PUT /produtos/:id com preco negativo retorna 422', async () => {
+    const token = gerarTokenAdmin();
+    const res = await request(app)
+      .put('/api/v1/produtos/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ preco: -50 });
+    expect(res.statusCode).toBe(422);
+    expect(res.body.erro).toMatch(/preço/i);
+  });
+
+  test('PUT /produtos/:id com preco válido retorna 200', async () => {
+    const token = gerarTokenAdmin();
+    const res = await request(app)
+      .put('/api/v1/produtos/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ preco: 199.90 });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data).toHaveProperty('preco', 199.90);
   });
 });

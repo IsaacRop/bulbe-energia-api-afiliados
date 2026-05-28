@@ -34,7 +34,8 @@
   },
   "homepage": "https://github.com/IsaacRop/bulbe-energia-api-afiliados#readme",
   "jest": {
-    "testMatch": ["**/tests/**/*.js"]
+    "testMatch": ["**/tests/**/*.js"],
+    "setupFiles": ["dotenv/config"]
   },
   "devDependencies": {
     "jest": "^30.4.2",
