@@ -21,7 +21,8 @@ const ProdutosService = {
   },
 
   listar({ search, categoria } = {}) {
-    if (search) return ProdutosModel.findBySearch(search);
+    if (search && categoria) return ProdutosModel.findBySearchECategoria(search, categoria);
+    if (search)    return ProdutosModel.findBySearch(search);
     if (categoria) return ProdutosModel.findByCategoria(categoria);
     return ProdutosModel.findAll();
   },
