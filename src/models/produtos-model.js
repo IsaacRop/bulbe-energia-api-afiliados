@@ -29,9 +29,20 @@ const ProdutosModel = {
       .all(`%${categoria}%`);
   },
 
+  findBySearchECategoria(termo, categoria) {
+    const like = `%${termo}%`;
+    return db.prepare(`${SELECT_PRODUTO} WHERE (p.nome LIKE ? OR p.descricao LIKE ?) AND c.nome LIKE ? ORDER BY p.id`)
+      .all(like, like, `%${categoria}%`);
+  },
+
   findByAfiliadoNome(nomeAfiliado) {
     return db.prepare(`${SELECT_PRODUTO} WHERE a.nome = ? ORDER BY p.id`)
       .all(nomeAfiliado);
+  },
+
+  findByAfiliadoId(afiliadoId) {
+    return db.prepare(`${SELECT_PRODUTO} WHERE p.afiliado_id = ? ORDER BY p.id`)
+      .all(Number(afiliadoId));
   },
 
   create(dados) {
