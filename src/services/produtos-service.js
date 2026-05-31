@@ -58,11 +58,20 @@ const ProdutosService = {
       }
     }
 
+    // Verifica existência antes de tentar atualizar — distingue 404 de 422
+    const existente = ProdutosModel.findById(id);
+    if (!existente) {
+      const err = new Error('Produto não encontrado.');
+      err.status = 404;
+      throw err;
+    }
+
     const produto = ProdutosModel.updateById(id, dados);
 
     if (!produto) {
-      const err = new Error('Produto não encontrado.');
-      err.status = 404;
+      // updateById retorna null apenas quando sets.length === 0 (nenhum campo válido)
+      const err = new Error('Nenhum campo reconhecido para atualizar.');
+      err.status = 422;
       throw err;
     }
 
