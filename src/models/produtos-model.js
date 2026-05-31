@@ -34,6 +34,11 @@ const ProdutosModel = {
       .all(nomeAfiliado);
   },
 
+  findByAfiliadoId(afiliadoId) {
+    return db.prepare(`${SELECT_PRODUTO} WHERE p.afiliado_id = ? ORDER BY p.id`)
+      .all(Number(afiliadoId));
+  },
+
   create(dados) {
     const { nome, descricao, preco, imagem, linkAfiliado, loja, categoria } = dados;
 

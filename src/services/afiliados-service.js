@@ -32,7 +32,7 @@ function listarProdutosPorAfiliado(id) {
     throw err;
   }
 
-  return ProdutosModel.findByAfiliadoNome(afiliado.nome);
+  return ProdutosModel.findByAfiliadoId(afiliado.id);
 }
 
 module.exports = { listarTodos, cadastrar, listarProdutosPorAfiliado };
