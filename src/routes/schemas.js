@@ -55,7 +55,8 @@
  *           example: joao@email.com
  *         papel:
  *           type: string
- *           example: user
+ *           enum: [admin, cliente]
+ *           example: cliente
  *
  *     LoginResponse:
  *       type: object

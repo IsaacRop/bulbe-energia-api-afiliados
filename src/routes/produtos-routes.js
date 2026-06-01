@@ -154,6 +154,18 @@ router.get('/:id', ProdutosController.buscarPorId);
  *               properties:
  *                 data:
  *                   $ref: '#/components/schemas/Produto'
+ *       401:
+ *         description: Token ausente ou inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Erro'
+ *       403:
+ *         description: Acesso negado. Apenas administradores podem atualizar produtos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Erro'
  *       404:
  *         description: Produto não encontrado
  *         content:
@@ -188,6 +200,18 @@ router.put('/:id', authMiddleware, adminMiddleware, ProdutosController.atualizar
  *     responses:
  *       204:
  *         description: Produto removido com sucesso
+ *       401:
+ *         description: Token ausente ou inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Erro'
+ *       403:
+ *         description: Acesso negado. Apenas administradores podem remover produtos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Erro'
  *       404:
  *         description: Produto não encontrado
  *         content:
