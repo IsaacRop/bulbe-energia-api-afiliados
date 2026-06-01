@@ -32,7 +32,9 @@ paths:
     post:
       tags:
         - Afiliados
-      summary: Cadastra um novo afiliado
+      summary: Cadastra um novo afiliado (somente admin)
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -46,6 +48,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Afiliado"
+        "401":
+          description: Token ausente ou inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "403":
+          description: Acesso restrito a administradores
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
         "422":
           description: Dados inválidos ou slug já em uso
           content:
