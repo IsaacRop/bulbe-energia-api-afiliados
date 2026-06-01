@@ -37,29 +37,34 @@
 | RF-14 | Remover produto do catálogo                                      | US-14        | COULD      | Implementado |
 | RF-15 | Cadastrar novo usuário com senha criptografada (bcrypt)          | US-15        | MUST       | Implementado |
 | RF-16 | Autenticar usuário e emitir token JWT                            | US-16        | MUST       | Implementado |
+| RF-17 | Listar todos os usuários cadastrados (acesso restrito a admin)   | US-17        | SHOULD     | Implementado |
 
 ---
 
 ## Mapa de Endpoints
 
-| Verbo  | Path                              | RF    | Auth | Status esperado |
-|--------|-----------------------------------|-------|------|-----------------|
-| POST   | /api/v1/auth/register             | RF-15 | Não  | 201, 422        |
-| POST   | /api/v1/auth/login                | RF-16 | Não  | 200, 401        |
-| GET    | /api/v1/afiliados                 | RF-01 | Não  | 200             |
-| POST   | /api/v1/afiliados                 | RF-12 | Não  | 201, 422        |
-| GET    | /api/v1/afiliados/:id/produtos    | RF-02 | Não  | 200, 404        |
-| GET    | /api/v1/produtos                  | RF-04 | Não  | 200             |
-| GET    | /api/v1/produtos?categoria=:cat   | RF-05 | Não  | 200             |
-| GET    | /api/v1/produtos?search=:termo    | RF-11 | Não  | 200             |
-| GET    | /api/v1/produtos/:id              | RF-03 | Não  | 200, 404        |
-| POST   | /api/v1/produtos                  | RF-10 | Sim  | 201, 401, 422   |
-| PUT    | /api/v1/produtos/:id              | RF-13 | Sim  | 200, 401, 404   |
-| DELETE | /api/v1/produtos/:id              | RF-14 | Sim  | 200, 401, 404   |
-| GET    | /api/v1/categorias                | RF-06 | Não  | 200             |
-| GET    | /api/v1/favoritos                 | RF-08 | Sim  | 200, 401        |
-| POST   | /api/v1/favoritos                 | RF-07 | Sim  | 201, 401, 422   |
-| DELETE | /api/v1/favoritos/:id             | RF-09 | Sim  | 200, 401, 404   |
+> **Auth:** _Não_ = público · _JWT_ = requer token válido · _Admin_ = requer token de administrador.
+
+| Verbo  | Path                              | RF    | Auth  | Status esperado |
+|--------|-----------------------------------|-------|-------|-----------------|
+| GET    | /api/v1/health                    | —     | Não   | 200             |
+| POST   | /api/v1/auth/register             | RF-15 | Não   | 201, 422        |
+| POST   | /api/v1/auth/login                | RF-16 | Não   | 200, 401        |
+| GET    | /api/v1/afiliados                 | RF-01 | Não   | 200             |
+| POST   | /api/v1/afiliados                 | RF-12 | Admin | 201, 401, 403, 422 |
+| GET    | /api/v1/afiliados/:id/produtos    | RF-02 | Não   | 200, 404        |
+| GET    | /api/v1/produtos                  | RF-04 | Não   | 200             |
+| GET    | /api/v1/produtos?categoria=:cat   | RF-05 | Não   | 200             |
+| GET    | /api/v1/produtos?search=:termo    | RF-11 | Não   | 200             |
+| GET    | /api/v1/produtos/:id              | RF-03 | Não   | 200, 404        |
+| POST   | /api/v1/produtos                  | RF-10 | Admin | 201, 401, 403, 422 |
+| PUT    | /api/v1/produtos/:id              | RF-13 | Admin | 200, 401, 403, 404 |
+| DELETE | /api/v1/produtos/:id              | RF-14 | Admin | 200, 401, 403, 404 |
+| GET    | /api/v1/categorias                | RF-06 | Não   | 200             |
+| GET    | /api/v1/favoritos                 | RF-08 | JWT   | 200, 401        |
+| POST   | /api/v1/favoritos                 | RF-07 | JWT   | 201, 401, 422   |
+| DELETE | /api/v1/favoritos/:id             | RF-09 | JWT   | 200, 401, 404   |
+| GET    | /api/v1/usuarios                  | RF-17 | Admin | 200, 401, 403   |
 
 ---
 
@@ -68,9 +73,9 @@
 | ID     | Categoria        | Descrição                                                                   | Status      |
 |--------|------------------|-----------------------------------------------------------------------------|-------------|
 | RNF-01 | Desempenho       | Endpoints de leitura respondem em ≤ 300ms (p95)                             | Atendido    |
-| RNF-02 | Segurança        | Rotas de escrita e favoritos exigem token JWT válido (Bearer)               | Implementado |
+| RNF-02 | Segurança        | Rotas de escrita exigem token de admin; favoritos exigem token JWT válido (Bearer) | Implementado |
 | RNF-03 | Manutenibilidade | Código segue ESLint + padrão arquitetural MVC (Routes → Controller → Service → Model) | Implementado |
 | RNF-04 | Escalabilidade   | API suporta múltiplos afiliados sem alteração estrutural                    | Atendido    |
 | RNF-05 | Portabilidade    | API documentada via OpenAPI 3.0.3 acessível em `/api-docs`                  | Implementado |
 | RNF-06 | Persistência     | Dados armazenados em banco SQLite com WAL e chaves estrangeiras ativadas     | Implementado |
-| RNF-07 | Testabilidade    | Cobertura mínima com Jest + Supertest (15 testes automatizados)             | Implementado |
+| RNF-07 | Testabilidade    | Cobertura com Jest + Supertest (54 casos em 6 suítes: auth, afiliados, produtos, categorias, favoritos, admin) | Implementado |
