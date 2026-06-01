@@ -8,6 +8,11 @@ function findById(id) {
   return db.prepare('SELECT * FROM usuarios WHERE id = ?').get(id);
 }
 
+// Lista todos os usuários sem expor a senha
+function findAll() {
+  return db.prepare('SELECT id, nome, email, papel FROM usuarios ORDER BY id').all();
+}
+
 function create({ nome, email, senha, papel = 'cliente' }) {
   const result = db.prepare(
     'INSERT INTO usuarios (nome, email, senha, papel) VALUES (?, ?, ?, ?)'
@@ -16,4 +21,4 @@ function create({ nome, email, senha, papel = 'cliente' }) {
   return db.prepare('SELECT * FROM usuarios WHERE id = ?').get(result.lastInsertRowid);
 }
 
-module.exports = { findByEmail, findById, create };
+module.exports = { findByEmail, findById, findAll, create };
