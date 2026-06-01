@@ -5,7 +5,7 @@
 **Backend do sistema de e-commerce de produtos de afiliados**  
 Projeto desenvolvido para a disciplina de Projeto de Desenvolvimento Backend — IBMEC
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Status](https://img.shields.io/badge/status-conclu%C3%ADdo-success)
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -115,29 +115,38 @@ A API ficará disponível em `http://localhost:3000/api/v1`.
 ## 📡 Endpoints da API
 
 > Consulte o arquivo completo em [`docs/requisitos.md`](./docs/requisitos.md).
+> Legenda de autenticação: **—** público · **JWT** requer token · **Admin** requer token de administrador.
 
-| Verbo  | Path                           | Descrição                          |
-|--------|--------------------------------|------------------------------------|
-| GET    | /api/v1/afiliados              | Lista todos os afiliados           |
-| GET    | /api/v1/afiliados/:id/produtos | Lista produtos de um afiliado      |
-| GET    | /api/v1/produtos               | Lista todos os produtos            |
-| GET    | /api/v1/produtos/:id           | Detalhes de um produto             |
-| GET    | /api/v1/produtos?categoria=    | Filtra produtos por categoria      |
-| GET    | /api/v1/produtos?search=       | Busca produtos por termo           |
-| GET    | /api/v1/categorias             | Lista todas as categorias          |
-| POST   | /api/v1/produtos               | Cadastra novo produto              |
-| PUT    | /api/v1/produtos/:id           | Atualiza produto existente         |
-| DELETE | /api/v1/produtos/:id           | Remove produto do catálogo         |
-| GET    | /api/v1/favoritos              | Lista favoritos do usuário         |
-| POST   | /api/v1/favoritos              | Adiciona produto aos favoritos     |
-| DELETE | /api/v1/favoritos/:id          | Remove produto dos favoritos       |
-| POST   | /api/v1/afiliados              | Cadastra novo afiliado             |
+| Verbo  | Path                           | Descrição                          | Auth  |
+|--------|--------------------------------|------------------------------------|-------|
+| GET    | /api/v1/health                 | Verifica se a API está no ar       | —     |
+| POST   | /api/v1/auth/register          | Cadastra novo usuário (senha em hash) | —  |
+| POST   | /api/v1/auth/login             | Autentica e emite token JWT        | —     |
+| GET    | /api/v1/afiliados              | Lista todos os afiliados           | —     |
+| POST   | /api/v1/afiliados              | Cadastra novo afiliado             | Admin |
+| GET    | /api/v1/afiliados/:id/produtos | Lista produtos de um afiliado      | —     |
+| GET    | /api/v1/produtos               | Lista todos os produtos            | —     |
+| GET    | /api/v1/produtos?categoria=    | Filtra produtos por categoria      | —     |
+| GET    | /api/v1/produtos?search=       | Busca produtos por termo           | —     |
+| GET    | /api/v1/produtos/:id           | Detalhes de um produto             | —     |
+| POST   | /api/v1/produtos               | Cadastra novo produto              | Admin |
+| PUT    | /api/v1/produtos/:id           | Atualiza produto existente         | Admin |
+| DELETE | /api/v1/produtos/:id           | Remove produto do catálogo         | Admin |
+| GET    | /api/v1/categorias             | Lista todas as categorias          | —     |
+| GET    | /api/v1/favoritos              | Lista favoritos do usuário         | JWT   |
+| POST   | /api/v1/favoritos              | Adiciona produto aos favoritos     | JWT   |
+| DELETE | /api/v1/favoritos/:id          | Remove produto dos favoritos       | JWT   |
+| GET    | /api/v1/usuarios               | Lista todos os usuários            | Admin |
 
 ---
 
 ## 📚 Documentação OpenAPI
 
-> Arquivo em [`docs/openapi.yaml`](./docs/openapi.yaml) — a ser preenchido progressivamente.
+A API é documentada via **OpenAPI 3.0.3** e exposta de duas formas:
+
+- **Swagger UI interativo** (gerado em runtime via `swagger-jsdoc` a partir das anotações `@openapi` nas rotas): `http://localhost:3000/api-docs`
+- **JSON da especificação:** `http://localhost:3000/api-docs.json`
+- **Arquivo estático:** [`docs/openapi.yaml`](./docs/openapi.yaml)
 
 ---
 
@@ -155,7 +164,8 @@ bulbe-energia-api-afiliados/
 │   ├── middlewares/          # Auth JWT, tratamento de erros
 │   ├── config/               # Configuração de ambiente
 │   ├── db/
-│   │   └── conexão.js        # Conexão SQLite + criação das tabelas
+│   │   ├── conexao.js        # Conexão SQLite + criação das tabelas
+│   │   └── seed.js           # População inicial do banco (idempotente)
 │   ├── app.js                # Instancia o Express e middlewares
 │   └── server.js             # Sobe o servidor HTTP
 ├── bulbe.db                  # Banco SQLite (gerado automaticamente)
@@ -177,8 +187,8 @@ bulbe-energia-api-afiliados/
 | Kickoff | Apresentação dos trabalhos do semestre anterior | ✅ Concluída |
 | Sprint 1 | Setup + Elicitação de Requisitos | ✅ Concluída |
 | Sprint 2 | Modelagem + Arquitetura + CRUD básico | ✅ Concluída |
-| Sprint 3 | Banco de Dados (SQLite) + Autenticação JWT | 🔄 Em andamento |
-| Sprint 4 | Testes + Documentação Final | ⏳ Aguardando |
+| Sprint 3 | Banco de Dados (SQLite) + Autenticação JWT | ✅ Concluída |
+| Sprint 4 | Testes + Documentação Final | ✅ Concluída |
 
 ---
 

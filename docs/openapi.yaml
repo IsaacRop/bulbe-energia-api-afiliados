@@ -1,1 +1,682 @@
- 
+openapi: 3.0.3
+info:
+  title: Bulbe Afiliados API
+  version: 1.0.0
+  description: API REST para gerenciamento do programa de afiliados da Bulbe
+    Energia. Permite listar, consultar e cadastrar produtos, afiliados,
+    favoritos e usuários.
+  contact:
+    name: Equipe Bulbe Energia
+    email: seuemail@alunos.ibmec.edu.br
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Servidor de desenvolvimento local
+paths:
+  /afiliados:
+    get:
+      tags:
+        - Afiliados
+      summary: Lista todos os afiliados
+      responses:
+        "200":
+          description: Lista retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Afiliado"
+    post:
+      tags:
+        - Afiliados
+      summary: Cadastra um novo afiliado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AfiliadoInput"
+      responses:
+        "201":
+          description: Afiliado cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Afiliado"
+        "422":
+          description: Dados inválidos ou slug já em uso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  "/afiliados/{id}/produtos":
+    get:
+      tags:
+        - Afiliados
+      summary: Lista os produtos de um afiliado pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do afiliado
+      responses:
+        "200":
+          description: Lista de produtos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Produto"
+        "404":
+          description: Afiliado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Registra um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInput"
+      responses:
+        "201":
+          description: Usuário registrado com sucesso!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+        "422":
+          description: Campos obrigatórios ausentes ou email já cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Autentica um usuário e retorna o token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login realizado com sucesso!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Login ou senha inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /categorias:
+    get:
+      tags:
+        - Categorias
+      summary: Lista todas as categorias disponíveis
+      responses:
+        "200":
+          description: Lista retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Categoria"
+  /favoritos:
+    get:
+      tags:
+        - Favoritos
+      summary: Lista os favoritos do usuário autenticado
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Favorito"
+        "401":
+          description: Token ausente ou inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+    post:
+      tags:
+        - Favoritos
+      summary: Adiciona um produto aos favoritos
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FavoritoInput"
+      responses:
+        "201":
+          description: Favorito adicionado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Favorito"
+        "401":
+          description: Token ausente ou inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  "/favoritos/{id}":
+    delete:
+      tags:
+        - Favoritos
+      summary: Remove um favorito pelo ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID do favorito a ser removido
+      responses:
+        "200":
+          description: Favorito removido com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Favorito removido com sucesso
+                  data:
+                    $ref: "#/components/schemas/Favorito"
+        "401":
+          description: Token ausente ou inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "404":
+          description: Favorito não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /produtos:
+    post:
+      tags:
+        - Produtos
+      summary: Cadastra um novo produto
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProdutoInput"
+      responses:
+        "201":
+          description: Produto cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Produto"
+        "401":
+          description: Token ausente ou inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "403":
+          description: Acesso negado. Apenas administradores podem cadastrar produtos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "422":
+          description: Campos obrigatórios ausentes ou inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+    get:
+      tags:
+        - Produtos
+      summary: Lista todos os produtos
+      parameters:
+        - in: query
+          name: search
+          required: false
+          schema:
+            type: string
+          description: Termo para busca por nome ou descrição
+        - in: query
+          name: categoria
+          required: false
+          schema:
+            type: string
+          description: Filtrar produtos por categoria (ex. "Energia Solar")
+      responses:
+        "200":
+          description: Lista retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Produto"
+  "/produtos/{id}":
+    get:
+      tags:
+        - Produtos
+      summary: Busca um produto pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do produto
+      responses:
+        "200":
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Produto"
+        "404":
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+    put:
+      tags:
+        - Produtos
+      summary: Atualiza um produto pelo ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProdutoInput"
+      responses:
+        "200":
+          description: Produto atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Produto"
+        "404":
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "422":
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+    delete:
+      tags:
+        - Produtos
+      summary: Remove um produto pelo ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do produto
+      responses:
+        "204":
+          description: Produto removido com sucesso
+        "404":
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+  /usuarios:
+    get:
+      tags:
+        - Usuários
+      summary: Lista todos os usuários cadastrados (somente admin)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        nome:
+                          type: string
+                        email:
+                          type: string
+                        papel:
+                          type: string
+                          enum:
+                            - admin
+                            - cliente
+        "401":
+          description: Token ausente ou inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+        "403":
+          description: Acesso restrito a administradores
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erro"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Erro:
+      type: object
+      properties:
+        erro:
+          type: string
+          example: Mensagem de erro
+    RegisterInput:
+      type: object
+      required:
+        - nome
+        - email
+        - senha
+      properties:
+        nome:
+          type: string
+          example: João Silva
+        email:
+          type: string
+          example: joao@email.com
+        senha:
+          type: string
+          example: senha123
+    LoginInput:
+      type: object
+      required:
+        - email
+        - senha
+      properties:
+        email:
+          type: string
+          example: joao@email.com
+        senha:
+          type: string
+          example: senha123
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: João Silva
+        email:
+          type: string
+          example: joao@email.com
+        papel:
+          type: string
+          example: user
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        user:
+          $ref: "#/components/schemas/Usuario"
+    Afiliado:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: Amazon
+        slug:
+          type: string
+          example: amazon
+        logo:
+          type: string
+          example: icon-amazon.png
+        site:
+          type: string
+          example: https://www.amazon.com.br
+    AfiliadoInput:
+      type: object
+      required:
+        - nome
+        - slug
+        - logo
+        - site
+      properties:
+        nome:
+          type: string
+          example: Shopee
+        slug:
+          type: string
+          example: shopee
+        logo:
+          type: string
+          example: icon-shopee.png
+        site:
+          type: string
+          example: https://shopee.com.br
+    Categoria:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: Energia Solar
+        slug:
+          type: string
+          example: energia-solar
+    Produto:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: Carregador e Painel Solar 21W ALLPOWERS
+        preco:
+          type: number
+          example: 280.16
+        categoria:
+          type: string
+          example: Energia Solar
+        imagem:
+          type: string
+          example: carregador-painel.jpg
+        linkAfiliado:
+          type: string
+          example: https://www.amazon.com.br/...
+        loja:
+          type: string
+          example: Amazon
+        lojalogo:
+          type: string
+          example: icon-amazon.png
+        descricao:
+          type: string
+          example: Painel solar inteligente altamente eficiente
+        tags_home:
+          type: array
+          items:
+            type: string
+          example:
+            - eco
+        pagina:
+          type: string
+          example: /paginas/produto.html?id=1
+        totalavali:
+          type: integer
+          example: 13
+        totalstar:
+          type: number
+          example: 4.4
+    ProdutoInput:
+      type: object
+      required:
+        - nome
+        - preco
+        - categoria
+        - loja
+      properties:
+        nome:
+          type: string
+          example: Carregador e Painel Solar 21W ALLPOWERS
+        preco:
+          type: number
+          example: 280.16
+        categoria:
+          type: string
+          example: Energia Solar
+        imagem:
+          type: string
+          example: carregador-painel.jpg
+        linkAfiliado:
+          type: string
+          example: https://www.amazon.com.br/...
+        loja:
+          type: string
+          example: Amazon
+        lojalogo:
+          type: string
+          example: icon-amazon.png
+        descricao:
+          type: string
+          example: Painel solar inteligente altamente eficiente
+        tags_home:
+          type: array
+          items:
+            type: string
+          example:
+            - eco
+        pagina:
+          type: string
+          example: /paginas/produto.html?id=1
+        totalavali:
+          type: integer
+          example: 0
+        totalstar:
+          type: number
+          example: 0
+    Favorito:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1716123456789"
+        usuarioId:
+          type: string
+          example: "1"
+        produtoId:
+          type: integer
+          example: 3
+        criadoEm:
+          type: string
+          format: date-time
+          example: 2025-05-20T14:32:01.000Z
+    FavoritoInput:
+      type: object
+      required:
+        - produtoId
+      properties:
+        produtoId:
+          type: integer
+          example: 3
+tags:
+  - name: Afiliados
+    description: Gerenciamento de afiliados
+  - name: Auth
+    description: Autenticação e registro de usuários
+  - name: Categorias
+    description: Listagem de categorias de produtos
+  - name: Favoritos
+    description: Gerenciamento de favoritos do usuário autenticado
+  - name: Produtos
+    description: Gerenciamento de produtos
+  - name: Usuários
+    description: Gerenciamento de usuários (acesso restrito a administradores)
