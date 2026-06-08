@@ -3,7 +3,9 @@ const db = require('../db/conexao');
 const SELECT_PRODUTO = `
   SELECT p.id, p.nome, p.descricao, p.preco, p.imagem, p.link_afiliado AS linkAfiliado,
          p.tags_home,
-         a.nome AS loja, a.logo AS lojalogo, c.nome AS categoria
+         a.nome AS loja, a.logo AS lojalogo, c.nome AS categoria,
+         (SELECT COUNT(*) FROM comentarios co WHERE co.produto_id = p.id AND co.nota IS NOT NULL) AS totalavali,
+         (SELECT ROUND(AVG(co.nota), 1) FROM comentarios co WHERE co.produto_id = p.id AND co.nota IS NOT NULL) AS totalstar
   FROM produtos p
   LEFT JOIN afiliados a ON p.afiliado_id = a.id
   LEFT JOIN categorias c ON p.categoria_id = c.id

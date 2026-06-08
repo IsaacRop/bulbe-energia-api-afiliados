@@ -136,6 +136,10 @@ A API ficará disponível em `http://localhost:3000/api/v1`.
 | GET    | /api/v1/favoritos              | Lista favoritos do usuário         | JWT   |
 | POST   | /api/v1/favoritos              | Adiciona produto aos favoritos     | JWT   |
 | DELETE | /api/v1/favoritos/:id          | Remove produto dos favoritos       | JWT   |
+| GET    | /api/v1/comentarios?produtoId= | Lista comentários de um produto    | —     |
+| POST   | /api/v1/comentarios            | Adiciona comentário a um produto   | JWT   |
+| PUT    | /api/v1/comentarios/:id        | Atualiza comentário próprio        | JWT   |
+| DELETE | /api/v1/comentarios/:id        | Remove comentário (autor ou admin) | JWT   |
 | GET    | /api/v1/usuarios               | Lista todos os usuários            | Admin |
 
 ---

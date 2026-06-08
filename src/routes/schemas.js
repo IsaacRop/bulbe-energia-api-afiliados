@@ -153,9 +153,11 @@
  *           example: /paginas/produto.html?id=1
  *         totalavali:
  *           type: integer
+ *           description: Quantidade de comentários com nota — calculado dinamicamente a partir de /comentarios
  *           example: 13
  *         totalstar:
  *           type: number
+ *           description: Média das notas dos comentários (1 casa decimal) — calculado dinamicamente a partir de /comentarios
  *           example: 4.4
  *
  *     ProdutoInput:
@@ -225,4 +227,44 @@
  *         produtoId:
  *           type: integer
  *           example: 3
+ *
+ *     Comentario:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         produtoId:
+ *           type: integer
+ *           example: 3
+ *         usuarioId:
+ *           type: integer
+ *           example: 1
+ *         usuarioNome:
+ *           type: string
+ *           example: João Silva
+ *         conteudo:
+ *           type: string
+ *           example: Produto excelente, chegou rápido e funciona muito bem!
+ *         nota:
+ *           type: integer
+ *           example: 5
+ *         criadoEm:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-05-20T14:32:01.000Z"
+ *
+ *     ComentarioInput:
+ *       type: object
+ *       required: [produtoId, conteudo]
+ *       properties:
+ *         produtoId:
+ *           type: integer
+ *           example: 3
+ *         conteudo:
+ *           type: string
+ *           example: Produto excelente, chegou rápido e funciona muito bem!
+ *         nota:
+ *           type: integer
+ *           example: 5
  */
