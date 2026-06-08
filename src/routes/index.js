@@ -5,6 +5,7 @@ const produtosRoutes = require('./produtos-routes');
 const authRoutes = require('./auth-routes');
 const categoriasRoutes = require('./categorias-routes');
 const usuariosRoutes = require('./usuarios-routes');
+const comentariosRoutes = require('./comentarios-routes');
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use('/favoritos', favoritosRoutes);
 router.use('/categorias', categoriasRoutes);
 router.use('/produtos', produtosRoutes);
 router.use('/usuarios', usuariosRoutes);
+router.use('/comentarios', comentariosRoutes);
 
 module.exports = router;
