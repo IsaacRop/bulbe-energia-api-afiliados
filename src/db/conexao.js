@@ -49,6 +49,15 @@ db.exec(`
     produto_id  INTEGER NOT NULL REFERENCES produtos(id),
     UNIQUE(usuario_id, produto_id)
   );
+
+  CREATE TABLE IF NOT EXISTS comentarios (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    produto_id  INTEGER NOT NULL REFERENCES produtos(id),
+    usuario_id  INTEGER NOT NULL REFERENCES usuarios(id),
+    conteudo    TEXT    NOT NULL,
+    nota        INTEGER CHECK (nota IS NULL OR (nota BETWEEN 1 AND 5)),
+    criado_em   TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Migration: add tags_home column to existing databases (safe to run multiple times)
